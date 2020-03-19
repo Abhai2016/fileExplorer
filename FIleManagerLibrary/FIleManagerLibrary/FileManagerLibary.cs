@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 
-namespace FIleManagerLibrary.FileSystem
+namespace FileManagerLibrary
 {
-    abstract class FileSystem
+    public abstract class FileManagerLibary
     {
-        protected internal delegate void FileManagerStateHandler(string message);
+        public delegate void FileManagerStateHandler(string message);
 
         protected internal event FileManagerStateHandler Copied;
         protected internal event FileManagerStateHandler Created;
@@ -24,7 +24,7 @@ namespace FIleManagerLibrary.FileSystem
 
         public abstract void Move(string oldPath, string newPath);
 
-        public abstract void Rename(string oldName, string newName);
+        public abstract void Rename(string oldPath, string newPath);
 
 
 
@@ -36,17 +36,42 @@ namespace FIleManagerLibrary.FileSystem
 
         public string[] GetDirectories(string path)
         {
-            string[] directories = Directory.GetDirectories(path);
-            string[] files = Directory.GetFiles(path);
-            string[] all = new string[directories.Length + files.Length];
+            try
+            {
+                string[] directories = Directory.GetDirectories(path);
+                string[] files = Directory.GetFiles(path);
+                string[] all = new string[directories.Length + files.Length];
+                int indexDifference = 0;
 
-            for (int i = 0; i < all.Length; i++)
-                if (i < directories.Length)
-                    all[i] = directories[i];
-                else
-                    all[i] = files[i];
+                for (int i = 0; i < all.Length; i++)
+                    if (i < directories.Length)
+                        all[i] = directories[i];
+                    else
+                    {
+                        if (indexDifference == 0)
+                            indexDifference = i;
+                        all[i] = files[i - indexDifference];
+                    }
+                        
+                return all;
+            }
+            catch (DirectoryNotFoundException exception)
+            {
+                string[] message = { $"Такая директория не существует. {exception.Message}" };
+                return message;
+            }
+        }
 
-            return all;
+
+        protected string getNameFromPath(string path)
+        {
+            int separatorIndex = path.LastIndexOf(@"\");
+            string name = path.Substring(separatorIndex);
+
+            if (name != null)
+                return name;
+            else
+                throw new Exception("Не удалось получить имя из пути");
         }
 
 

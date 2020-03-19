@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 
-namespace FIleManagerLibrary.FileSystem
+namespace FileManagerLibrary
 {
-    class Directories : FileSystem
+    public class FileSystem : FileManagerLibary
     {
-        public Directories(FileManagerStateHandler copied, FileManagerStateHandler created,
+        public FileSystem(FileManagerStateHandler copied, FileManagerStateHandler created,
             FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler renamed)
         {
             Copied += copied;
@@ -30,34 +30,34 @@ namespace FIleManagerLibrary.FileSystem
                 if (!File.Exists(newPath))
                     File.Copy(dirPath, dirPath.Replace(oldPath, newPath), true);
 
-            SetEvent("Copied", $"Папка {oldPath} успешна скопирована в {newPath}");
+            SetEvent("Copied", $"Папка {getNameFromPath(oldPath)} успешна скопирована в {newPath}");
         }
 
 
-        public override void Create(string directoryName)
+        public override void Create(string path)
         {
-            Directory.CreateDirectory(directoryName);
-            SetEvent("Created", $"Папка {directoryName} успешна создана");
+            Directory.CreateDirectory(path);
+            SetEvent("Created", $"Папка {getNameFromPath(path)} успешна создана");
         }
 
 
-        public override void Delete(string directoryName)
+        public override void Delete(string path)
         {
             try
             {
-                Directory.Delete(directoryName, true);
-                SetEvent("Deleted", $"Папка {directoryName} успешна удалена");
+                Directory.Delete(path, true);
+                SetEvent("Deleted", $"Папка {getNameFromPath(path)} успешна удалена");
             }
             catch (Exception exception)
             {
-                SetEvent("Deleted", $"Не удалось удалить папку {directoryName}. " + exception.Message);
+                SetEvent("Deleted", $"Не удалось удалить папку {getNameFromPath(path)}. " + exception.Message);
             }
         }
 
 
         public override void Move(string oldPath, string newPath)
         {
-            MoveTo("Moved", oldPath, newPath, $"Папка {oldPath} успешна перемещена в {newPath}", $"Папка {oldPath} не найдена", $"Папка с таким именем уже существует в {newPath}");    
+            MoveTo("Moved", oldPath, newPath, $"Папка {getNameFromPath(oldPath)} успешна перемещена в {newPath}", $"Папка {getNameFromPath(oldPath)} не найдена", $"Папка с таким именем уже существует в {newPath}");    
         }
 
 
@@ -76,9 +76,9 @@ namespace FIleManagerLibrary.FileSystem
         }
 
 
-        public override void Rename(string oldName, string newName)
+        public override void Rename(string oldPath, string newPath)
         {
-            MoveTo("Renamed", oldName, newName, $"Папка успешна переименована", $"Папка {oldName} не найдена", $"Папка с таким именем уже существует");
+            MoveTo("Renamed", oldPath, newPath, $"Папка успешна переименована", $"Папка {getNameFromPath(oldPath)} не найдена", $"Папка с таким именем уже существует");
         }
     }
 }

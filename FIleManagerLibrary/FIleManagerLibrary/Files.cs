@@ -1,8 +1,8 @@
 ﻿using System.IO;
 
-namespace FIleManagerLibrary.FileSystem
+namespace FileManagerLibrary
 {
-    class Files : FileSystem
+    public class Files : FileManagerLibary
     {
         public Files(FileManagerStateHandler copied, FileManagerStateHandler created,
             FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler renamed) 
@@ -26,7 +26,7 @@ namespace FIleManagerLibrary.FileSystem
             else if (File.Exists(newPath))
                 SetEvent("Copied", $"Файл с таким именем уже существует в {newPath}");
             else if (!File.Exists(oldPath))
-                SetEvent("Copied", $"Файл {oldPath} не найден");
+                SetEvent("Copied", $"Файл {getNameFromPath(oldPath)} не найден");
         }
 
 
@@ -42,21 +42,21 @@ namespace FIleManagerLibrary.FileSystem
         }
 
 
-        public override void Delete(string fileName)
+        public override void Delete(string path)
         {
-            if (File.Exists(fileName))
+            if (File.Exists(path))
             {
-                File.Delete(fileName);
-                SetEvent("Deleted", $"Файл {fileName} успешно удален");
+                File.Delete(path);
+                SetEvent("Deleted", $"Файл {path} успешно удален");
             }
             else
-                SetEvent("Deleted", $"Файл {fileName} не найден");
+                SetEvent("Deleted", $"Файл {path} не найден");
         }
 
 
         public override void Move(string oldPath, string newPath)
         {
-            MoveTo("Moved", oldPath, newPath, $"Файл {oldPath} успешно перемещен в {newPath}", $"Файл {oldPath} не найден", $"Файл {oldPath} уже существует в {newPath}");
+            MoveTo("Moved", oldPath, newPath, $"Файл {getNameFromPath(oldPath)} успешно перемещен в {newPath}", $"Файл {getNameFromPath(oldPath)} не найден", $"Файл {getNameFromPath(oldPath)} уже существует в {newPath}");
         }
 
 
@@ -74,9 +74,9 @@ namespace FIleManagerLibrary.FileSystem
         }
 
 
-        public override void Rename(string oldName, string newName)
+        public override void Rename(string oldPath, string newPath)
         {
-            MoveTo("Renamed", oldName, newName, "Файл успешно создан", $"Файл {oldName} не найден", $"Файл с таким именем уже существует в {newName}");
+            MoveTo("Renamed", oldPath, newPath, "Файл успешно создан", $"Файл {getNameFromPath(oldPath)} не найден", $"Файл с таким именем уже существует в {newPath}");
         }
     }
 }

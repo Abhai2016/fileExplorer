@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v3.1": {
       "File Manager/1.0.0": {
+        "dependencies": {
+          "FIleManagerLibrary": "1.0.0"
+        },
         "runtime": {
           "File Manager.dll": {}
+        }
+      },
+      "FIleManagerLibrary/1.0.0": {
+        "runtime": {
+          "FIleManagerLibrary.dll": {}
         }
       }
     }
   },
   "libraries": {
     "File Manager/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "FIleManagerLibrary/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

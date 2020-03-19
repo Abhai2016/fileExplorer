@@ -6,4 +6,8 @@
     <RootNamespace>File_Manager</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FIleManagerLibrary\FIleManagerLibrary\FIleManagerLibrary.csproj" />
+  </ItemGroup>
+
 </Project>
