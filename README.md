@@ -1,2 +1,2 @@
-# fileManager
+# fileExplorer
 First project on C#

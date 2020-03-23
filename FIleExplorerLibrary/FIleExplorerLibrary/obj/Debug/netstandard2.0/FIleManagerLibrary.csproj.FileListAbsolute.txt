@@ -1,0 +1,9 @@
+C:\Work\.NET\Console Projects\File Manager\FIleManagerLibrary\FIleManagerLibrary\bin\Debug\netstandard2.0\FIleManagerLibrary.deps.json
+C:\Work\.NET\Console Projects\File Manager\FIleManagerLibrary\FIleManagerLibrary\bin\Debug\netstandard2.0\FIleManagerLibrary.dll
+C:\Work\.NET\Console Projects\File Manager\FIleManagerLibrary\FIleManagerLibrary\bin\Debug\netstandard2.0\FIleManagerLibrary.pdb
+C:\Work\.NET\Console Projects\File Manager\FIleManagerLibrary\FIleManagerLibrary\obj\Debug\netstandard2.0\FIleManagerLibrary.csprojAssemblyReference.cache
+C:\Work\.NET\Console Projects\File Manager\FIleManagerLibrary\FIleManagerLibrary\obj\Debug\netstandard2.0\FIleManagerLibrary.AssemblyInfoInputs.cache
+C:\Work\.NET\Console Projects\File Manager\FIleManagerLibrary\FIleManagerLibrary\obj\Debug\netstandard2.0\FIleManagerLibrary.AssemblyInfo.cs
+C:\Work\.NET\Console Projects\File Manager\FIleManagerLibrary\FIleManagerLibrary\obj\Debug\netstandard2.0\FIleManagerLibrary.dll
+C:\Work\.NET\Console Projects\File Manager\FIleManagerLibrary\FIleManagerLibrary\obj\Debug\netstandard2.0\FIleManagerLibrary.pdb
+C:\Work\.NET\Console Projects\File Manager\FIleManagerLibrary\FIleManagerLibrary\obj\Debug\netstandard2.0\FIleManagerLibrary.csproj.CoreCompileInputs.cache
