@@ -1,8 +1,18 @@
-﻿namespace FileSystem
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace FileSystem
 {
-    public class Directory
+    public class Directory : BaseData 
     {
-/*
+
+        public Directory(string path)
+        {
+            Path = path;
+        }
+
+
         public override void Copy(string oldPath, string newPath)
         {
             try
@@ -17,11 +27,11 @@
                     if (!System.IO.File.Exists(newPath))
                         System.IO.File.Copy(dirPath, dirPath.Replace(oldPath, newPath), true);
 
-                SetEvent("Copied", $"Папка {getNameFromPath(oldPath)} успешна скопирована в {newPath}");
+                SetEvent("Copied", $"Folder {getNameFromPath(oldPath)} successfully copied to {newPath}");
             }
             catch (Exception exception)
             {
-                SetEvent("Copied", $"Папка {getNameFromPath(oldPath)} не найдена по пути {oldPath}. {exception.Message}");
+                SetEvent("Copied", $"Folder {getNameFromPath(oldPath)} doesnt exist in {oldPath}. {exception.Message}");
             } 
         }
 
@@ -31,11 +41,11 @@
             try
             {
                 System.IO.Directory.CreateDirectory(path);
-                SetEvent("Created", $"Папка {getNameFromPath(path)} успешна создана");
+                SetEvent("Created", $"Folder {getNameFromPath(path)} successfully created");
             }
             catch (Exception exception)
             {
-                SetEvent("Created", $"Не удалось создать папку {getNameFromPath(path)}. {exception.Message}");
+                SetEvent("Created", $"Coudln't create a folder {getNameFromPath(path)}. {exception.Message}");
             }
         }
 
@@ -45,18 +55,18 @@
             try
             {
                 System.IO.Directory.Delete(path, true);
-                SetEvent("Deleted", $"Папка {getNameFromPath(path)} успешна удалена");
+                SetEvent("Deleted", $"Folder {getNameFromPath(path)} successfully deleted");
             }
             catch (Exception exception)
             {
-                SetEvent("Deleted", $"Не удалось удалить папку {getNameFromPath(path)}. {exception.Message}");
+                SetEvent("Deleted", $"Couldn't delete {getNameFromPath(path)}. {exception.Message}");
             }
         }
 
 
         public override void Move(string oldPath, string newPath)
         {
-            MoveTo("Moved", oldPath, newPath, $"Папка {getNameFromPath(oldPath)} успешна перемещена в {newPath}", $"Папка {getNameFromPath(oldPath)} не найдена", $"Папка с таким именем уже существует в {newPath}");    
+            MoveTo("Moved", oldPath, newPath, $"Folder {getNameFromPath(oldPath)} successfully moved to {newPath}", $"Folder {getNameFromPath(oldPath)} doesn't exist", $"Folder already exists in {newPath}");    
         }
 
 
@@ -75,10 +85,21 @@
         }
 
 
+        public List<BaseData> Open(string path)
+        {
+            string[] stringDirectories = System.IO.Directory.GetDirectories(path);
+            List<BaseData> listDirectories = new List<BaseData>() { new Directory(@"..\") };
+
+            for (int i = 0; i < stringDirectories.Length; i++)
+                listDirectories.Add(new Directory(stringDirectories[i]));
+
+            return listDirectories;
+        }
+
+
         public override void Rename(string oldPath, string newPath)
         {
-            MoveTo("Renamed", oldPath, newPath, $"Папка успешна переименована", $"Папка {getNameFromPath(oldPath)} не найдена", $"Папка с таким именем уже существует");
+            MoveTo("Renamed", oldPath, newPath, $"Folder successfully reanmed", $"Folder {getNameFromPath(oldPath)} doesn't exist", $"Folder with this name already exists");
         }
-        */
     }
 }

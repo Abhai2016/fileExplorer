@@ -1,8 +1,10 @@
-﻿namespace FileSystem
+﻿using System.Collections.Generic;
+using System.IO;
+
+namespace FileSystem
 {
-    public class File
+    public class File : BaseData
     {
-        /*
         public override void Copy(string oldPath, string newPath)
         {
             if (System.IO.File.Exists(oldPath) && !System.IO.File.Exists(newPath))
@@ -61,10 +63,23 @@
         }
 
 
+        public List<string> Open(string path)
+        {
+            using (StreamReader streamReader = new StreamReader(path, System.Text.Encoding.Default))
+            {
+                string line;
+                List<string> text = new List<string>(); 
+                while ((line = streamReader.ReadLine()) != null)
+                    text.Add(line);
+
+                return text; 
+            }
+        }
+
+
         public override void Rename(string oldPath, string newPath)
         {
             MoveTo("Renamed", oldPath, newPath, "Файл успешно создан", $"Файл {getNameFromPath(oldPath)} не найден", $"Файл с таким именем уже существует в {newPath}");
         }
-        */
     }
 }

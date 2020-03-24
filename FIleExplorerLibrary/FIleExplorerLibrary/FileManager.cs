@@ -1,75 +1,100 @@
-﻿using System;
-using System.IO;
+﻿using FileSystem;
+using System.Collections.Generic;
 
 namespace FileExplorerLibrary
 {
     public class FileManager
     {
-        private const int BytesPerGigabyte = 1073741824;
+        private List<BaseData> files;
 
-        public delegate void FileManagerStateHandler(string message);
-
-        protected internal event FileManagerStateHandler Copied;
-        protected internal event FileManagerStateHandler Created;
-        protected internal event FileManagerStateHandler Deleted;
-        protected internal event FileManagerStateHandler Moved;
-        protected internal event FileManagerStateHandler Renamed;
+        private string currentPath;
 
 
-        public FileManager(FileManagerStateHandler copied, FileManagerStateHandler created,
-            FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler renamed)
-       {
-            Copied += copied;
-            Created += created;
-            Deleted += deleted;
-            Moved += moved;
-            Renamed += renamed;
+
+
+        public FileManager()
+        {
+            currentPath = @"C:\";
+
+            files = new List<BaseData>() { new Directory(@"C:\") };
+            files = (files[0] as Directory).Open(currentPath);
         }
 
 
-        public void printDrives()
-        {
-            double totalDriveSpace = 0;
-            double freeDriveSpace = 0;
 
-            foreach (DriveInfo drive in DriveInfo.GetDrives())
+
+        private int Contains(string path)
+        {
+            for (int i = 0; i < files.Count; i++)
+                if (files[i].Path == path)
+                    return i;
+            return -1;
+        }
+
+
+        public void Copy(string name)
+        {
+
+        }
+
+
+        public void Create(string name)
+        {
+
+        }
+
+
+        public void Delete(string name)
+        {
+
+        }
+
+
+        public List<BaseData> GetData()
+        {
+            return files;
+        }
+
+
+        public void Move(string name)
+        {
+
+        }
+
+
+        public void Open(string name)
+        {
+            if (name != @"..\")
             {
-                if (drive.IsReady)
+                int dataIndex = Contains(currentPath + name);
+                if (dataIndex != -1)
                 {
-                    totalDriveSpace = (double)drive.TotalSize / BytesPerGigabyte;
-                    freeDriveSpace = (double)drive.AvailableFreeSpace / BytesPerGigabyte;
-
-                    Console.WriteLine($"{drive.VolumeLabel} {drive.Name}");
-                    Console.WriteLine("Свободно {0:0.00} Гб из {1:0.00} Гб", freeDriveSpace, totalDriveSpace);
+                    if (files[dataIndex] is Directory)
+                    {
+                        files = (files[dataIndex] as Directory).Open(currentPath + name);
+                        currentPath = currentPath + name + @"\";
+                    }
+                    // else if (files[dataIndex] is File)
                 }
-                Console.WriteLine();
             }
+            else
+                GoToParentDirectory();
         }
 
 
-
-        protected void SetEvent(string eventType, string message)
+        public void Rename()
         {
-            switch (eventType)
-            {
-                case "Copied":
-                    Copied?.Invoke(message);
-                    break;
-                case "Created":
-                    Created?.Invoke(message);
-                    break;
-                case "Deleted":
-                    Deleted?.Invoke(message);
-                    break;
-                case "Moved":
-                    Moved?.Invoke(message);
-                    break;
-                case "Renamed":
-                    Renamed?.Invoke(message);
-                    break;
-                default:
-                    throw new Exception("Такого события не существует");
-            }
+
+        }
+
+        
+
+        private void GoToParentDirectory()
+        {
+            currentPath = currentPath.Substring(0, currentPath.Length - 1); // doesn't count a backslash in the end
+            int backslashIndex = currentPath.LastIndexOf(@"\");
+            currentPath = currentPath.Substring(0, backslashIndex + 1); // keep a backslash in the end
+            files = (files[0] as Directory).Open(currentPath);
         }
     }
 }

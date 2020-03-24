@@ -1,4 +1,5 @@
 ﻿using FileExplorerLibrary;
+using FileSystem;
 using System;
 
 
@@ -7,36 +8,52 @@ namespace File_Explorer
     class File_Explorer
     {
         private const string title = "File Explorer";
-
         private static bool isAlive = true;
+        private static FileManager fileManager = new FileManager();
 
 
 
         static void Main(string[] args)
         {
             WriteCenterColorText(title, ConsoleColor.Blue);
-
-            FileManager fileManager = new FileManager(Copied, Created, Deleted, Moved, Renamed);
-            fileManager.printDrives();
-
-
+            printData();
+            
             while (isAlive)
             {
-                Console.WriteLine("Для копирования файла введите 1, для перемещения 2, удаления 3, переименования 4, а для выхода введите 0");
-                string path = Console.ReadLine();
+                Console.WriteLine("Commands - Copy/Create/Delete/Open/Rename/Exit");
+                string action = Console.ReadLine();
 
-                //TODO switch for actions
-
-                if (path.Equals("0"))
-                    isAlive = false;
-                else
+                switch (action)
                 {
-                    
+                    case "Copy":
+                        break;
+                    case "Create":
+                        break;
+                    case "Delete":
+                        break;
+                    case "Open":
+                        Console.WriteLine("Write the name of the folder(file) which you want to open");
+                        fileManager.Open(Console.ReadLine());
+                        Console.WriteLine();
+                        printData();
+                        break;
+                    case "Rename":
+                        break;
+                    case "Exit":
+                        isAlive = false;
+                        break;
                 }
-                
             }
         }
 
+
+
+        private static void printData()
+        {
+            foreach (BaseData data in fileManager.GetData())
+                Console.WriteLine(data.Path);
+            Console.WriteLine();
+        }
 
         private static void WriteCenterColorText(String text, ConsoleColor color)
         {
