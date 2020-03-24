@@ -1,0 +1,9 @@
+C:\Work\.NET\Console Projects\File Explorer\FIleExplorerLibrary\FIleExplorerLibrary\bin\Debug\netstandard2.0\FIleExplorerLibrary.deps.json
+C:\Work\.NET\Console Projects\File Explorer\FIleExplorerLibrary\FIleExplorerLibrary\bin\Debug\netstandard2.0\FIleExplorerLibrary.dll
+C:\Work\.NET\Console Projects\File Explorer\FIleExplorerLibrary\FIleExplorerLibrary\bin\Debug\netstandard2.0\FIleExplorerLibrary.pdb
+C:\Work\.NET\Console Projects\File Explorer\FIleExplorerLibrary\FIleExplorerLibrary\obj\Debug\netstandard2.0\FIleExplorerLibrary.csprojAssemblyReference.cache
+C:\Work\.NET\Console Projects\File Explorer\FIleExplorerLibrary\FIleExplorerLibrary\obj\Debug\netstandard2.0\FIleExplorerLibrary.csproj.CoreCompileInputs.cache
+C:\Work\.NET\Console Projects\File Explorer\FIleExplorerLibrary\FIleExplorerLibrary\obj\Debug\netstandard2.0\FIleExplorerLibrary.AssemblyInfoInputs.cache
+C:\Work\.NET\Console Projects\File Explorer\FIleExplorerLibrary\FIleExplorerLibrary\obj\Debug\netstandard2.0\FIleExplorerLibrary.AssemblyInfo.cs
+C:\Work\.NET\Console Projects\File Explorer\FIleExplorerLibrary\FIleExplorerLibrary\obj\Debug\netstandard2.0\FIleExplorerLibrary.dll
+C:\Work\.NET\Console Projects\File Explorer\FIleExplorerLibrary\FIleExplorerLibrary\obj\Debug\netstandard2.0\FIleExplorerLibrary.pdb
