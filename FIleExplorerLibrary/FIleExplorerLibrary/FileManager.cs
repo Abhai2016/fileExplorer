@@ -14,9 +14,9 @@ namespace FileExplorerLibrary
 
         public FileManager()
         {
-            currentPath = @"C:\";
+            currentPath = @"C:\\";
 
-            files = new List<BaseData>() { new Directory(@"C:\") };
+            files = new List<BaseData>() { new Directory(@"C:\\") };
             files = (files[0] as Directory).Open(currentPath);
         }
 
@@ -77,7 +77,7 @@ namespace FileExplorerLibrary
                     // else if (files[dataIndex] is File)
                 }
             }
-            else
+            else if (!currentPath.Equals(@"C:\\"))
                 GoToParentDirectory();
         }
 
