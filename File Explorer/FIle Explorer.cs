@@ -20,28 +20,39 @@ namespace File_Explorer
             
             while (isAlive)
             {
-                Console.WriteLine("Commands - Copy/Create/Delete/Open/Rename/Exit");
-                string action = Console.ReadLine();
-
-                switch (action)
+                if (!fileManager.isFileOpen)
                 {
-                    case "Copy":
-                        break;
-                    case "Create":
-                        break;
-                    case "Delete":
-                        break;
-                    case "Open":
-                        Console.WriteLine("Write the name of the folder(file) which you want to open");
-                        fileManager.Open(Console.ReadLine());
-                        Console.WriteLine();
+                    Console.WriteLine("Commands - Copy/Create/Delete/Open/Rename/Exit");
+                    string action = Console.ReadLine();
+
+                    switch (action)
+                    {
+                        case "Copy":
+                            break;
+                        case "Create":
+                            break;
+                        case "Delete":
+                            break;
+                        case "Open":
+                            Console.WriteLine("Write the name of the folder(file) which you want to open");
+                            fileManager.Open(Console.ReadLine());
+                            printData();
+                            break;
+                        case "Rename":
+                            break;
+                        case "Exit":
+                            isAlive = false;
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("To close file write command \"Close\"");
+                    if (Console.ReadLine().Equals("Close"))
+                    {
+                        fileManager.Close();
                         printData();
-                        break;
-                    case "Rename":
-                        break;
-                    case "Exit":
-                        isAlive = false;
-                        break;
+                    }
                 }
             }
         }
@@ -50,10 +61,25 @@ namespace File_Explorer
 
         private static void printData()
         {
+            Console.WriteLine();
+
             foreach (BaseData data in fileManager.GetData())
-                Console.WriteLine(data.Path);
+            {
+                if (fileManager.isFileOpen)
+                {
+                    if ((data is File) && (data as File).Content.Length > 0)
+                    {
+                        Console.Write((data as File).Content);
+                        break;
+                    }
+                }  
+                else
+                    Console.WriteLine(data.Path); 
+            }  
+
             Console.WriteLine();
         }
+
 
         private static void WriteCenterColorText(String text, ConsoleColor color)
         {

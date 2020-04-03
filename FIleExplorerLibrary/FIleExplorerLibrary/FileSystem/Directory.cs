@@ -88,12 +88,15 @@ namespace FileSystem
         public List<BaseData> Open(string path)
         {
             string[] stringDirectories = System.IO.Directory.GetDirectories(path);
-            List<BaseData> listDirectories = new List<BaseData>() { new Directory(@"..\") };
+            string[] stringFiles = System.IO.Directory.GetFiles(path);
+            List<BaseData> listDirectoriesAndFiles = new List<BaseData>() { new Directory(@"..\") };
 
             for (int i = 0; i < stringDirectories.Length; i++)
-                listDirectories.Add(new Directory(stringDirectories[i]));
+                listDirectoriesAndFiles.Add(new Directory(stringDirectories[i]));
+            for (int i = 0; i < stringFiles.Length; i++)
+                listDirectoriesAndFiles.Add(new File(stringFiles[i]));
 
-            return listDirectories;
+            return listDirectoriesAndFiles;
         }
 
 

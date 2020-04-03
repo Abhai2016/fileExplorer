@@ -1,10 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace FileSystem
 {
     public class File : BaseData
     {
+        public StringBuilder Content { get; set; }
+
+
+
+        public File(string path)
+        {
+            Path = path;
+            Content = new StringBuilder();
+        }
+
+
+
         public override void Copy(string oldPath, string newPath)
         {
             if (System.IO.File.Exists(oldPath) && !System.IO.File.Exists(newPath))
@@ -63,16 +76,12 @@ namespace FileSystem
         }
 
 
-        public List<string> Open(string path)
+        public void Open(string path)
         {
-            using (StreamReader streamReader = new StreamReader(path, System.Text.Encoding.Default))
+            using (StreamReader streamReader = new StreamReader(path))
             {
-                string line;
-                List<string> text = new List<string>(); 
-                while ((line = streamReader.ReadLine()) != null)
-                    text.Add(line);
-
-                return text; 
+                while (!streamReader.EndOfStream)
+                    Content.AppendLine(streamReader.ReadLine());
             }
         }
 
