@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace FileSystem
@@ -29,9 +28,9 @@ namespace FileSystem
 
                 SetEvent("Copied", $"Folder {getNameFromPath(oldPath)} successfully copied to {newPath}");
             }
-            catch (Exception exception)
+            catch
             {
-                SetEvent("Copied", $"Folder {getNameFromPath(oldPath)} doesnt exist in {oldPath}. {exception.Message}");
+                SetEvent("Copied", $"Folder {getNameFromPath(oldPath)} doesnt exist in {oldPath}");
             } 
         }
 
@@ -43,9 +42,9 @@ namespace FileSystem
                 System.IO.Directory.CreateDirectory(path);
                 SetEvent("Created", $"Folder {getNameFromPath(path)} successfully created");
             }
-            catch (Exception exception)
+            catch
             {
-                SetEvent("Created", $"Coudln't create a folder {getNameFromPath(path)}. {exception.Message}");
+                SetEvent("Created", $"Coudln't create a folder {getNameFromPath(path)}");
             }
         }
 
@@ -57,9 +56,9 @@ namespace FileSystem
                 System.IO.Directory.Delete(path, true);
                 SetEvent("Deleted", $"Folder {getNameFromPath(path)} successfully deleted");
             }
-            catch (Exception exception)
+            catch
             {
-                SetEvent("Deleted", $"Couldn't delete {getNameFromPath(path)}. {exception.Message}");
+                SetEvent("Deleted", $"Couldn't delete {getNameFromPath(path)}");
             }
         }
 
@@ -73,7 +72,7 @@ namespace FileSystem
         private void MoveTo(string fileManagerStateHandler, string oldPath, string newPath, string success, string notFound, string alreadyExists)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(oldPath);
-            if (directoryInfo.Exists && !System.IO.Directory.Exists(newPath))
+            if (directoryInfo.Exists && System.IO.Directory.Exists(newPath) == false)
             {
                 directoryInfo.MoveTo(newPath);
                 SetEvent(fileManagerStateHandler, success);

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
 namespace FileSystem
@@ -20,15 +19,18 @@ namespace FileSystem
 
         public override void Copy(string oldPath, string newPath)
         {
-            if (System.IO.File.Exists(oldPath) && !System.IO.File.Exists(newPath))
+            try 
             {
                 System.IO.File.Copy(oldPath, newPath);
                 SetEvent("Copied", "Файл успешно скопирован");
             }
-            else if (System.IO.File.Exists(newPath))
-                SetEvent("Copied", $"Файл с таким именем уже существует в {newPath}");
-            else if (!System.IO.File.Exists(oldPath))
-                SetEvent("Copied", $"Файл {getNameFromPath(oldPath)} не найден");
+            catch
+            {
+                if (System.IO.File.Exists(newPath))
+                    SetEvent("Copied", $"Файл с таким именем уже существует в {newPath}");
+                else if (!System.IO.File.Exists(oldPath))
+                    SetEvent("Copied", $"Файл {getNameFromPath(oldPath)} не найден");
+            }    
         }
 
 
@@ -64,15 +66,18 @@ namespace FileSystem
 
         private void MoveTo(string fileManagerStateHandler, string oldPath, string newPath, string success, string notFound, string alreadyExists)
         {
-            if (System.IO.File.Exists(oldPath) && !System.IO.File.Exists(newPath))
+            try
             {
                 System.IO.File.Move(oldPath, newPath);
                 SetEvent("Moved", success);
             }
-            else if (!System.IO.File.Exists(oldPath))
-                SetEvent(fileManagerStateHandler, notFound);
-            else if (System.IO.File.Exists(newPath))
-                SetEvent(fileManagerStateHandler, alreadyExists);
+            catch
+            {
+                if (!System.IO.File.Exists(oldPath))
+                    SetEvent(fileManagerStateHandler, notFound);
+                else if (System.IO.File.Exists(newPath))
+                    SetEvent(fileManagerStateHandler, alreadyExists);
+            }
         }
 
 

@@ -8,7 +8,9 @@ namespace File_Explorer
     class File_Explorer
     {
         private const string title = "File Explorer";
+        private const string fileOrDirectroryName = "Write the name of the folder(file) which you want to ";
         private static bool isAlive = true;
+
         private static FileManager fileManager = new FileManager();
 
 
@@ -20,23 +22,37 @@ namespace File_Explorer
             
             while (isAlive)
             {
-                if (!fileManager.isFileOpen)
+                if (!fileManager.IsFileOpen)
                 {
-                    Console.WriteLine("Commands - Copy/Create/Delete/Open/Rename/Exit");
+                    Console.WriteLine("Commands - Open/Cut/Copy/Create/Delete/Rename/Exit");
                     string action = Console.ReadLine();
 
                     switch (action)
                     {
+                        case "Open":
+                            Console.WriteLine(fileOrDirectroryName + "open");
+                            fileManager.Open(Console.ReadLine());
+                            printData();
+                            break;
+                        case "Cut":
+                            Console.WriteLine(fileOrDirectroryName + "move");
+                            fileManager.Clipboard = Console.ReadLine();
+                            fileManager.IsCopy = false;
+                            printData();
+                            break;
                         case "Copy":
+                            Console.WriteLine(fileOrDirectroryName + "copy");
+                            fileManager.Clipboard = Console.ReadLine();
+                            fileManager.IsCopy = true;
+                            printData();
+                            break;
+                        case "Paste":
+                            fileManager.Paste();
+                            printData();
                             break;
                         case "Create":
                             break;
                         case "Delete":
-                            break;
-                        case "Open":
-                            Console.WriteLine("Write the name of the folder(file) which you want to open");
-                            fileManager.Open(Console.ReadLine());
-                            printData();
                             break;
                         case "Rename":
                             break;
@@ -65,7 +81,7 @@ namespace File_Explorer
 
             foreach (BaseData data in fileManager.GetData())
             {
-                if (fileManager.isFileOpen)
+                if (fileManager.IsFileOpen)
                 {
                     if ((data is File) && (data as File).Content.Length > 0)
                     {

@@ -33,7 +33,7 @@ namespace FileSystem
         {
             try
             {
-                int separatorIndex = path.LastIndexOf(@"\");
+                int separatorIndex = path.LastIndexOf(@"\") + 1; // doesn't count the last backslash
                 string name = path.Substring(separatorIndex);
                 return name;
             }
