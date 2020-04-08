@@ -78,11 +78,24 @@ namespace FileExplorerLibrary
         }
 
 
+        public void Copy(string path)
+        {
+            Clipboard = path;
+            IsCopy = true;
+        }
+
+
         public void Create(string name)
         {
 
         }
 
+
+        public void Cut(string path)
+        {
+            Clipboard = path;
+            IsCopy = false;
+        }
 
         public void Delete(string name)
         {

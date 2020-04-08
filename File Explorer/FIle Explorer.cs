@@ -32,23 +32,17 @@ namespace File_Explorer
                         case "Open":
                             Console.WriteLine(fileOrDirectroryName + "open");
                             fileManager.Open(Console.ReadLine());
-                            printData();
                             break;
                         case "Cut":
                             Console.WriteLine(fileOrDirectroryName + "move");
-                            fileManager.Clipboard = Console.ReadLine();
-                            fileManager.IsCopy = false;
-                            printData();
+                            fileManager.Cut(Console.ReadLine());
                             break;
                         case "Copy":
                             Console.WriteLine(fileOrDirectroryName + "copy");
-                            fileManager.Clipboard = Console.ReadLine();
-                            fileManager.IsCopy = true;
-                            printData();
+                            fileManager.Copy(Console.ReadLine());
                             break;
                         case "Paste":
                             fileManager.Paste();
-                            printData();
                             break;
                         case "Create":
                             break;
@@ -59,7 +53,7 @@ namespace File_Explorer
                         case "Exit":
                             isAlive = false;
                             break;
-                    }
+                    }    
                 }
                 else
                 {
@@ -67,9 +61,9 @@ namespace File_Explorer
                     if (Console.ReadLine().Equals("Close"))
                     {
                         fileManager.Close();
-                        printData();
                     }
                 }
+                printData();
             }
         }
 
