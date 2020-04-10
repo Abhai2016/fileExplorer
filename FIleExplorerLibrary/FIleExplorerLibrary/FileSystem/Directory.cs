@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FileSystem
@@ -50,12 +51,18 @@ namespace FileSystem
         {
             try
             {
-                System.IO.Directory.CreateDirectory(path);
-                SetEvent("Created", $"Folder {GetNameFromPath(path)} successfully created");
+                DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                if (!directoryInfo.Exists)
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                    SetEvent("Created", $"Folder {GetNameFromPath(path)} successfully created");
+                }
+                else
+                    SetEvent("Created", "Folder with this name already exists");
             }
-            catch
+            catch (Exception exception)
             {
-                SetEvent("Created", $"Coudln't create a folder {GetNameFromPath(path)}");
+                SetEvent("Created", exception.Message);
             }
         }
 
@@ -67,9 +74,9 @@ namespace FileSystem
                 System.IO.Directory.Delete(path, true);
                 SetEvent("Deleted", $"Folder {GetNameFromPath(path)} successfully deleted");
             }
-            catch
+            catch (Exception exception)
             {
-                SetEvent("Deleted", $"Couldn't delete {GetNameFromPath(path)}");
+                SetEvent("Deleted", exception.Message);
             }
         }
 
@@ -83,15 +90,20 @@ namespace FileSystem
         private void MoveTo(string fileManagerStateHandler, string newPath, string success, string notFound, string alreadyExists)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(Path);
-            if (directoryInfo.Exists && System.IO.Directory.Exists(newPath) == false)
+            try
             {
-                directoryInfo.MoveTo(newPath);
-                SetEvent(fileManagerStateHandler, success);
+                if (!System.IO.Directory.Exists(newPath))
+                {
+                    directoryInfo.MoveTo(newPath);
+                    SetEvent(fileManagerStateHandler, success);
+                }
+                else
+                    SetEvent(fileManagerStateHandler, alreadyExists);
             }
-            else if (!directoryInfo.Exists)
+            catch 
+            {
                 SetEvent(fileManagerStateHandler, notFound);
-            else if (System.IO.Directory.Exists(newPath))
-                SetEvent(fileManagerStateHandler, alreadyExists);
+            }
         }
 
 

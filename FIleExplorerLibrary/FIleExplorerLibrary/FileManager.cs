@@ -1,5 +1,4 @@
 ﻿using FileSystem;
-using System;
 using System.Collections.Generic;
 using static FileSystem.BaseData;
 
@@ -84,9 +83,17 @@ namespace FileExplorerLibrary
         }
 
 
-        public void Create(string name)
+        public void Create(string fileOrFolder, string name)
         {
-
+            if (fileOrFolder.Equals("Folder"))
+                files[0].Create(currentPath + name);
+            else if (fileOrFolder.Equals("File"))
+            {
+                File file = new File(currentPath + name);
+                file.SetEventHandlers(Copied, Created, Deleted, Moved, Renamed);
+                file.Create(currentPath + name);
+            }
+            RefreshList();
         }
 
 
@@ -98,7 +105,14 @@ namespace FileExplorerLibrary
 
         public void Delete(string name)
         {
-
+            int dataIndex = Contains(currentPath + name);
+            if (dataIndex != -1)
+            {
+                files[dataIndex].Delete(currentPath + name);
+                RefreshList();
+            }
+            else
+                files[0].Delete(currentPath + name);
         }
 
 
@@ -153,7 +167,6 @@ namespace FileExplorerLibrary
 
         public void Paste()
         {
-            
             if (IsCopy)
                 Copy();
             else
@@ -172,16 +185,27 @@ namespace FileExplorerLibrary
         }
 
 
-        public void Rename()
+        public void Rename(string oldName, string newName)
         {
+            int dataIndex = Contains(currentPath + oldName);
 
+            if (dataIndex != -1)
+                files[dataIndex].Rename(currentPath + newName);
+            else
+            {
+                Directory directory = new Directory(currentPath + oldName);
+                directory.SetEventHandlers(Copied, Created, Deleted, Moved, Renamed);
+                directory.Rename(newName);
+            }
+
+            RefreshList();
         }
 
 
         private void SetEventHandlers()
         {
             foreach (BaseData file in files)
-                file.setEventHandlers(Copied, Created, Deleted, Moved, Renamed);
+                file.SetEventHandlers(Copied, Created, Deleted, Moved, Renamed);
         }
     }
 }

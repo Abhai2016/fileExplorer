@@ -39,25 +39,34 @@ namespace FileSystem
 
         public override void Create(string fileName)
         {
-            if (!System.IO.File.Exists(fileName))
+            try
             {
-                System.IO.File.Create(fileName);
-                SetEvent("Created", "File successfuly created");
-            }   
-            else
-                SetEvent("Created", "File already exists here");
+                if (!System.IO.File.Exists(fileName))
+                {
+                    System.IO.File.Create(fileName);
+                    SetEvent("Created", "File successfuly created");
+                }
+                else
+                    SetEvent("Created", "File already exists here");
+            }
+            catch (Exception exception)
+            {
+                SetEvent("Created", exception.Message);
+            }
         }
 
 
         public override void Delete(string path)
         {
-            if (System.IO.File.Exists(path))
+            try
             {
                 System.IO.File.Delete(path);
                 SetEvent("Deleted", $"File {GetNameFromPath(path)} successfuly deleted");
             }
-            else
-                SetEvent("Deleted", $"File {GetNameFromPath(path)} not found");
+            catch (Exception exception)
+            {
+                SetEvent("Deleted", exception.Message);
+            }   
         }
 
 

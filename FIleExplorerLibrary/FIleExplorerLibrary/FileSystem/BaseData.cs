@@ -44,7 +44,7 @@ namespace FileSystem
         }
 
 
-        public void setEventHandlers(FileManagerStateHandler copied, FileManagerStateHandler created,
+        public void SetEventHandlers(FileManagerStateHandler copied, FileManagerStateHandler created,
             FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler renamed)
         {
             Copied += copied;
