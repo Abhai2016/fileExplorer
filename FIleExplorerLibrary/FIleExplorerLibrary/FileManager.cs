@@ -1,54 +1,59 @@
 ﻿using FileSystem;
 using System;
 using System.Collections.Generic;
+using static FileSystem.BaseData;
 
 namespace FileExplorerLibrary
 {
     public class FileManager
     {
+        private event FileManagerStateHandler Copied;
+        private event FileManagerStateHandler Created;
+        private event FileManagerStateHandler Deleted;
+        private event FileManagerStateHandler Moved;
+        private event FileManagerStateHandler Renamed;
+
         private List<BaseData> files;
+        private BaseData clipboard;
         private string currentPath;
 
 
         public bool IsFileOpen { get; private set; }
         public bool IsCopy { get; set; }
-        public bool IsFile { get; set; }
-
-
-        private string clipboard;
-        public string Clipboard {
-            get 
-            { 
-                return clipboard; 
-            }
-            set
-            {
-                int dataIndex = Contains(currentPath + value);
-                if (dataIndex != -1)
-                {
-                    if (files[dataIndex] is File)
-                        IsFile = true;
-                    else if (files[dataIndex] is Directory)
-                        IsFile = false;
-                    clipboard = currentPath + value;
-                }
-            }
-        }
 
 
 
 
-        public FileManager()
+
+        public FileManager(FileManagerStateHandler copied, FileManagerStateHandler created,
+            FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler renamed)
         {
+            Copied = copied;
+            Created = created;
+            Deleted = deleted;
+            Moved = moved;
+            Renamed = renamed;
+
             currentPath = @"C:\";
             IsFileOpen = false;
-            IsFile = false;
-
-            files = new List<BaseData>() { new Directory(@"C:\") };
+            clipboard = new Directory(@"C:\");
+            files = new List<BaseData>() { clipboard };
             files = (files[0] as Directory).Open(currentPath);
+            SetEventHandlers();
         }
 
 
+
+
+
+        private void CheckForExisting(string path)
+        {
+            int dataIndex = Contains(path);
+            if (dataIndex != -1)
+                clipboard = files[dataIndex];
+            else
+                clipboard = new Directory(path);
+        }
 
 
         public void Close()
@@ -68,19 +73,13 @@ namespace FileExplorerLibrary
 
         private void Copy()
         {
-            if (IsFile)
-            {
-                File file = new File(currentPath);
-                file.Copy(clipboard, currentPath + GetNameFromPath(clipboard));
-            }
-            else
-                (files[0] as Directory).Copy(clipboard, currentPath + GetNameFromPath(clipboard));
+            clipboard.Copy(currentPath + GetNameFromPath(clipboard.Path));
         }
 
 
-        public void Copy(string path)
+        public void Copy(string name)
         {
-            Clipboard = path;
+            CheckForExisting(currentPath + name);
             IsCopy = true;
         }
 
@@ -91,9 +90,9 @@ namespace FileExplorerLibrary
         }
 
 
-        public void Cut(string path)
+        public void Cut(string name)
         {
-            Clipboard = path;
+            CheckForExisting(currentPath + name);
             IsCopy = false;
         }
 
@@ -109,30 +108,18 @@ namespace FileExplorerLibrary
         }
 
 
-        private string GetNameFromPath(string path)
+        private void GoToParentDirectory()
         {
-            try
-            {
-                int separatorIndex = path.LastIndexOf(@"\") + 1; // doesn't count backslash in the end
-                string name = path.Substring(separatorIndex);
-                return name;
-            }
-            catch (Exception exception)
-            {
-                return "Couldn't get the name from path" + exception.Message;
-            }
+            currentPath = currentPath.Substring(0, currentPath.Length - 1); // doesn't count a backslash in the end
+            int backslashIndex = currentPath.LastIndexOf(@"\");
+            currentPath = currentPath.Substring(0, backslashIndex + 1); // keep a backslash in the end
+            files = (files[0] as Directory).Open(currentPath);
         }
 
 
         private void Move()
         {
-            if (IsFile)
-            {
-                File file = new File(currentPath);
-                file.Move(clipboard, currentPath + GetNameFromPath(clipboard));
-            }
-            else
-                (files[0] as Directory).Move(clipboard, currentPath + GetNameFromPath(clipboard));
+            clipboard.Move(currentPath + GetNameFromPath(clipboard.Path));
         }
 
 
@@ -154,22 +141,34 @@ namespace FileExplorerLibrary
                         IsFileOpen = true;
                     }               
                 }
+                SetEventHandlers();
             }
             else if (!currentPath.Equals(@"C:\"))
+            {
                 GoToParentDirectory();
+                SetEventHandlers();
+            }
         }
 
 
         public void Paste()
         {
-            if (!clipboard.Equals(""))
-            {
-                if (IsCopy)
-                    Copy();
-                else
-                    Move();
-            }
+            
+            if (IsCopy)
+                Copy();
+            else
+                Move();
             RefreshList();
+        }
+
+
+        private void RefreshList()
+        {
+            files.Clear();
+
+            files = new List<BaseData>() { new Directory(currentPath) };
+            files = (files[0] as Directory).Open(currentPath);
+            SetEventHandlers();
         }
 
 
@@ -179,23 +178,10 @@ namespace FileExplorerLibrary
         }
 
 
-        private void RefreshList()
+        private void SetEventHandlers()
         {
-            clipboard = "";
-            files.Clear();
-
-            files = new List<BaseData>() { new Directory(currentPath) };
-            files = (files[0] as Directory).Open(currentPath);
-        }
-
-        
-
-        private void GoToParentDirectory()
-        {
-            currentPath = currentPath.Substring(0, currentPath.Length - 1); // doesn't count a backslash in the end
-            int backslashIndex = currentPath.LastIndexOf(@"\");
-            currentPath = currentPath.Substring(0, backslashIndex + 1); // keep a backslash in the end
-            files = (files[0] as Directory).Open(currentPath);
+            foreach (BaseData file in files)
+                file.setEventHandlers(Copied, Created, Deleted, Moved, Renamed);
         }
     }
 }

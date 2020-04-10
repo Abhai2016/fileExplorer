@@ -11,7 +11,7 @@ namespace File_Explorer
         private const string fileOrDirectroryName = "Write the name of the folder(file) which you want to ";
         private static bool isAlive = true;
 
-        private static FileManager fileManager = new FileManager();
+        private static FileManager fileManager = new FileManager(Copied, Created, Deleted, Moved, Renamed);
 
 
 

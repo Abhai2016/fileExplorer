@@ -12,26 +12,37 @@ namespace FileSystem
         }
 
 
-        public override void Copy(string oldPath, string newPath)
+
+
+        public override void Copy(string newPath)
         {
-            try
+            DirectoryInfo sourceDirectory = new DirectoryInfo(Path);
+            DirectoryInfo targetDirectory = new DirectoryInfo(newPath);
+
+            if (sourceDirectory.Exists && !targetDirectory.Exists)
             {
-                foreach (string dirPath in System.IO.Directory.GetDirectories(oldPath, "*",
-                SearchOption.AllDirectories))
-                    if (!System.IO.Directory.Exists(newPath))
-                        System.IO.Directory.CreateDirectory(dirPath.Replace(oldPath, newPath));
-
-                foreach (string dirPath in System.IO.Directory.GetFiles(oldPath, "*.*",
-                    SearchOption.AllDirectories))
-                    if (!System.IO.File.Exists(newPath))
-                        System.IO.File.Copy(dirPath, dirPath.Replace(oldPath, newPath), true);
-
-                SetEvent("Copied", $"Folder {getNameFromPath(oldPath)} successfully copied to {newPath}");
+                CopyAll(sourceDirectory, targetDirectory);
+                SetEvent("Copied", $"Folder {GetNameFromPath(Path)} successfully copied to {targetDirectory.FullName}");
             }
-            catch
+            else if (!sourceDirectory.Exists)
+                SetEvent("Copied", $"Folder {GetNameFromPath(Path)} doesnt exist in {Path}");
+            else
+                SetEvent("Copied", $"Folder {GetNameFromPath(Path)} already exists in {targetDirectory.FullName}");
+        }
+
+
+        private void CopyAll(DirectoryInfo sourceDirectory, DirectoryInfo targetDirectory)
+        {
+            System.IO.Directory.CreateDirectory(targetDirectory.FullName);
+
+            foreach (FileInfo file in sourceDirectory.GetFiles())
+                file.CopyTo(System.IO.Path.Combine(targetDirectory.FullName, file.Name), true);
+
+            foreach (DirectoryInfo diSourceSubDir in sourceDirectory.GetDirectories())
             {
-                SetEvent("Copied", $"Folder {getNameFromPath(oldPath)} doesnt exist in {oldPath}");
-            } 
+                DirectoryInfo nextTargetSubDir = targetDirectory.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }  
         }
 
 
@@ -40,11 +51,11 @@ namespace FileSystem
             try
             {
                 System.IO.Directory.CreateDirectory(path);
-                SetEvent("Created", $"Folder {getNameFromPath(path)} successfully created");
+                SetEvent("Created", $"Folder {GetNameFromPath(path)} successfully created");
             }
             catch
             {
-                SetEvent("Created", $"Coudln't create a folder {getNameFromPath(path)}");
+                SetEvent("Created", $"Coudln't create a folder {GetNameFromPath(path)}");
             }
         }
 
@@ -54,24 +65,24 @@ namespace FileSystem
             try
             {
                 System.IO.Directory.Delete(path, true);
-                SetEvent("Deleted", $"Folder {getNameFromPath(path)} successfully deleted");
+                SetEvent("Deleted", $"Folder {GetNameFromPath(path)} successfully deleted");
             }
             catch
             {
-                SetEvent("Deleted", $"Couldn't delete {getNameFromPath(path)}");
+                SetEvent("Deleted", $"Couldn't delete {GetNameFromPath(path)}");
             }
         }
 
 
-        public override void Move(string oldPath, string newPath)
+        public override void Move(string newPath)
         {
-            MoveTo("Moved", oldPath, newPath, $"Folder {getNameFromPath(oldPath)} successfully moved to {newPath}", $"Folder {getNameFromPath(oldPath)} doesn't exist", $"Folder already exists in {newPath}");    
+            MoveTo("Moved", newPath, $"Folder {GetNameFromPath(Path)} successfully moved to {newPath}", $"Folder {GetNameFromPath(Path)} doesn't exist", $"Folder already exists in {newPath}");    
         }
 
 
-        private void MoveTo(string fileManagerStateHandler, string oldPath, string newPath, string success, string notFound, string alreadyExists)
+        private void MoveTo(string fileManagerStateHandler, string newPath, string success, string notFound, string alreadyExists)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(oldPath);
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path);
             if (directoryInfo.Exists && System.IO.Directory.Exists(newPath) == false)
             {
                 directoryInfo.MoveTo(newPath);
@@ -99,9 +110,9 @@ namespace FileSystem
         }
 
 
-        public override void Rename(string oldPath, string newPath)
+        public override void Rename(string newPath)
         {
-            MoveTo("Renamed", oldPath, newPath, $"Folder successfully reanmed", $"Folder {getNameFromPath(oldPath)} doesn't exist", $"Folder with this name already exists");
+            MoveTo("Renamed", newPath, $"Folder successfully reanmed", $"Folder {GetNameFromPath(Path)} doesn't exist", $"Folder with this name already exists");
         }
     }
 }

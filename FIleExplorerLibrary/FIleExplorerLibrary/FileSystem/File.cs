@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 
 namespace FileSystem
@@ -17,19 +18,21 @@ namespace FileSystem
 
 
 
-        public override void Copy(string oldPath, string newPath)
+        public override void Copy(string newPath)
         {
             try 
             {
-                System.IO.File.Copy(oldPath, newPath);
-                SetEvent("Copied", "Файл успешно скопирован");
+                System.IO.File.Copy(Path, newPath);
+                SetEvent("Copied", "File successfuly copied");
             }
-            catch
+            catch (Exception exception)
             {
                 if (System.IO.File.Exists(newPath))
-                    SetEvent("Copied", $"Файл с таким именем уже существует в {newPath}");
-                else if (!System.IO.File.Exists(oldPath))
-                    SetEvent("Copied", $"Файл {getNameFromPath(oldPath)} не найден");
+                    SetEvent("Copied", $"File already exists in {newPath}");
+                else if (!System.IO.File.Exists(Path))
+                    SetEvent("Copied", $"File {GetNameFromPath(Path)} not found");
+                else
+                    SetEvent("Copied", exception.Message);
             }    
         }
 
@@ -39,10 +42,10 @@ namespace FileSystem
             if (!System.IO.File.Exists(fileName))
             {
                 System.IO.File.Create(fileName);
-                SetEvent("Created", "Файл успешно создан");
+                SetEvent("Created", "File successfuly created");
             }   
             else
-                SetEvent("Created", "Такой файл уже существует");
+                SetEvent("Created", "File already exists here");
         }
 
 
@@ -51,16 +54,16 @@ namespace FileSystem
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.Delete(path);
-                SetEvent("Deleted", $"Файл {path} успешно удален");
+                SetEvent("Deleted", $"File {GetNameFromPath(path)} successfuly deleted");
             }
             else
-                SetEvent("Deleted", $"Файл {path} не найден");
+                SetEvent("Deleted", $"File {GetNameFromPath(path)} not found");
         }
 
 
-        public override void Move(string oldPath, string newPath)
+        public override void Move(string newPath)
         {
-            MoveTo("Moved", oldPath, newPath, $"Файл {getNameFromPath(oldPath)} успешно перемещен в {newPath}", $"Файл {getNameFromPath(oldPath)} не найден", $"Файл {getNameFromPath(oldPath)} уже существует в {newPath}");
+            MoveTo("Moved", Path, newPath, $"File {GetNameFromPath(Path)} successfuly moved in {newPath}", $"File {GetNameFromPath(Path)} not foudn", $"File {GetNameFromPath(Path)} already exists in {newPath}");
         }
 
 
@@ -71,12 +74,14 @@ namespace FileSystem
                 System.IO.File.Move(oldPath, newPath);
                 SetEvent("Moved", success);
             }
-            catch
+            catch (Exception exception)
             {
                 if (!System.IO.File.Exists(oldPath))
                     SetEvent(fileManagerStateHandler, notFound);
                 else if (System.IO.File.Exists(newPath))
                     SetEvent(fileManagerStateHandler, alreadyExists);
+                else
+                    SetEvent(fileManagerStateHandler, exception.Message);
             }
         }
 
@@ -91,9 +96,9 @@ namespace FileSystem
         }
 
 
-        public override void Rename(string oldPath, string newPath)
+        public override void Rename(string newPath)
         {
-            MoveTo("Renamed", oldPath, newPath, "Файл успешно создан", $"Файл {getNameFromPath(oldPath)} не найден", $"Файл с таким именем уже существует в {newPath}");
+            MoveTo("Renamed", Path, newPath, "File successfuly moved", $"File {GetNameFromPath(Path)} not found", $"File already exists in {newPath}");
         }
     }
 }

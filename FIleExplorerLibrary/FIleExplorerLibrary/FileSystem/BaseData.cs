@@ -17,19 +17,19 @@ namespace FileSystem
 
 
 
-        public abstract void Copy(string oldPath, string newPath);
+        public abstract void Copy(string newPath);
 
         public abstract void Create(string name);
 
         public abstract void Delete(string name);
 
-        public abstract void Move(string oldPath, string newPath);
+        public abstract void Move(string newPath);
 
-        public abstract void Rename(string oldName, string newName);
+        public abstract void Rename(string newName);
 
 
 
-        protected string getNameFromPath(string path)
+        internal static string GetNameFromPath(string path)
         {
             try
             {
