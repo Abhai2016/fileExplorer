@@ -10,6 +10,7 @@ namespace FileExplorerLibrary
         private event FileManagerStateHandler Created;
         private event FileManagerStateHandler Deleted;
         private event FileManagerStateHandler Moved;
+        private event FileManagerStateHandler Opened;
         private event FileManagerStateHandler Renamed;
 
         private List<BaseData> files;
@@ -25,12 +26,13 @@ namespace FileExplorerLibrary
 
 
         public FileManager(FileManagerStateHandler copied, FileManagerStateHandler created,
-            FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler renamed)
+            FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler opened, FileManagerStateHandler renamed)
         {
             Copied = copied;
             Created = created;
             Deleted = deleted;
             Moved = moved;
+            Opened = opened;
             Renamed = renamed;
 
             currentPath = @"C:\";
@@ -90,7 +92,7 @@ namespace FileExplorerLibrary
             else if (fileOrFolder.Equals("File"))
             {
                 File file = new File(currentPath + name);
-                file.SetEventHandlers(Copied, Created, Deleted, Moved, Renamed);
+                file.SetEventHandlers(Copied, Created, Deleted, Moved, Opened, Renamed);
                 file.Create(currentPath + name);
             }
             RefreshList();
@@ -155,6 +157,8 @@ namespace FileExplorerLibrary
                         IsFileOpen = true;
                     }               
                 }
+                else
+                    (files[0] as Directory).Open(currentPath + name);
                 SetEventHandlers();
             }
             else if (!currentPath.Equals(@"C:\"))
@@ -194,7 +198,7 @@ namespace FileExplorerLibrary
             else
             {
                 Directory directory = new Directory(currentPath + oldName);
-                directory.SetEventHandlers(Copied, Created, Deleted, Moved, Renamed);
+                directory.SetEventHandlers(Copied, Created, Deleted, Moved, Opened, Renamed);
                 directory.Rename(newName);
             }
 
@@ -205,7 +209,7 @@ namespace FileExplorerLibrary
         private void SetEventHandlers()
         {
             foreach (BaseData file in files)
-                file.SetEventHandlers(Copied, Created, Deleted, Moved, Renamed);
+                file.SetEventHandlers(Copied, Created, Deleted, Moved, Opened, Renamed);
         }
     }
 }

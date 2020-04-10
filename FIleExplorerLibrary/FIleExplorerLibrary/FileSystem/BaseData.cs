@@ -8,6 +8,7 @@ namespace FileSystem
         protected internal event FileManagerStateHandler Created;
         protected internal event FileManagerStateHandler Deleted;
         protected internal event FileManagerStateHandler Moved;
+        protected internal event FileManagerStateHandler Opened;
         protected internal event FileManagerStateHandler Renamed;
 
         public delegate void FileManagerStateHandler(string message);
@@ -45,12 +46,13 @@ namespace FileSystem
 
 
         public void SetEventHandlers(FileManagerStateHandler copied, FileManagerStateHandler created,
-            FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler renamed)
+            FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler opened, FileManagerStateHandler renamed)
         {
             Copied += copied;
             Created += created;
             Deleted += deleted;
             Moved += moved;
+            Opened += opened;
             Renamed += renamed;
         }
 
@@ -70,6 +72,9 @@ namespace FileSystem
                     break;
                 case "Moved":
                     Moved?.Invoke(message);
+                    break;
+                case "Opened":
+                    Opened?.Invoke(message);
                     break;
                 case "Renamed":
                     Renamed?.Invoke(message);

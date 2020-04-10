@@ -97,10 +97,15 @@ namespace FileSystem
 
         public void Open(string path)
         {
-            using (StreamReader streamReader = new StreamReader(path))
+            try
             {
+                StreamReader streamReader = new StreamReader(path);
                 while (!streamReader.EndOfStream)
                     Content.AppendLine(streamReader.ReadLine());
+            }
+            catch
+            {
+                SetEvent("Opened", $"Couldn't open {path}");
             }
         }
 

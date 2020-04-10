@@ -92,31 +92,39 @@ namespace FileSystem
             DirectoryInfo directoryInfo = new DirectoryInfo(Path);
             try
             {
-                if (!System.IO.Directory.Exists(newPath))
-                {
-                    directoryInfo.MoveTo(newPath);
-                    SetEvent(fileManagerStateHandler, success);
-                }
-                else
-                    SetEvent(fileManagerStateHandler, alreadyExists);
+                directoryInfo.MoveTo(newPath);
+                SetEvent(fileManagerStateHandler, success);
             }
-            catch 
+            catch (Exception exception)
             {
-                SetEvent(fileManagerStateHandler, notFound);
+                if (System.IO.Directory.Exists(newPath))
+                    SetEvent(fileManagerStateHandler, alreadyExists);
+                else if (!directoryInfo.Exists)
+                    SetEvent(fileManagerStateHandler, notFound);
+                else
+                    SetEvent(fileManagerStateHandler, exception.Message);
             }
         }
 
 
         public List<BaseData> Open(string path)
         {
-            string[] stringDirectories = System.IO.Directory.GetDirectories(path);
-            string[] stringFiles = System.IO.Directory.GetFiles(path);
             List<BaseData> listDirectoriesAndFiles = new List<BaseData>() { new Directory(@"..\") };
 
-            for (int i = 0; i < stringDirectories.Length; i++)
-                listDirectoriesAndFiles.Add(new Directory(stringDirectories[i]));
-            for (int i = 0; i < stringFiles.Length; i++)
-                listDirectoriesAndFiles.Add(new File(stringFiles[i]));
+            try
+            {
+                string[] stringDirectories = System.IO.Directory.GetDirectories(path);
+                string[] stringFiles = System.IO.Directory.GetFiles(path);
+
+                for (int i = 0; i < stringDirectories.Length; i++)
+                    listDirectoriesAndFiles.Add(new Directory(stringDirectories[i]));
+                for (int i = 0; i < stringFiles.Length; i++)
+                    listDirectoriesAndFiles.Add(new File(stringFiles[i]));
+            }
+            catch
+            {
+                SetEvent("Opened", $"Couldn't open {path}");
+            }
 
             return listDirectoriesAndFiles;
         }
