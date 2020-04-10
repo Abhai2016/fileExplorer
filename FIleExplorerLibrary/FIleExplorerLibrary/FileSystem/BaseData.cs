@@ -8,6 +8,7 @@ namespace FileSystem
         protected internal event FileManagerStateHandler Created;
         protected internal event FileManagerStateHandler Deleted;
         protected internal event FileManagerStateHandler Moved;
+        protected internal event FileManagerStateHandler Opened;
         protected internal event FileManagerStateHandler Renamed;
 
         public delegate void FileManagerStateHandler(string message);
@@ -17,23 +18,23 @@ namespace FileSystem
 
 
 
-        public abstract void Copy(string oldPath, string newPath);
+        public abstract void Copy(string newPath);
 
         public abstract void Create(string name);
 
         public abstract void Delete(string name);
 
-        public abstract void Move(string oldPath, string newPath);
+        public abstract void Move(string newPath);
 
-        public abstract void Rename(string oldName, string newName);
+        public abstract void Rename(string newName);
 
 
 
-        protected string getNameFromPath(string path)
+        internal static string GetNameFromPath(string path)
         {
             try
             {
-                int separatorIndex = path.LastIndexOf(@"\");
+                int separatorIndex = path.LastIndexOf(@"\") + 1; // doesn't count the last backslash
                 string name = path.Substring(separatorIndex);
                 return name;
             }
@@ -44,13 +45,14 @@ namespace FileSystem
         }
 
 
-        public void setEventHandlers(FileManagerStateHandler copied, FileManagerStateHandler created,
-            FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler renamed)
+        public void SetEventHandlers(FileManagerStateHandler copied, FileManagerStateHandler created,
+            FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler opened, FileManagerStateHandler renamed)
         {
             Copied += copied;
             Created += created;
             Deleted += deleted;
             Moved += moved;
+            Opened += opened;
             Renamed += renamed;
         }
 
@@ -70,6 +72,9 @@ namespace FileSystem
                     break;
                 case "Moved":
                     Moved?.Invoke(message);
+                    break;
+                case "Opened":
+                    Opened?.Invoke(message);
                     break;
                 case "Renamed":
                     Renamed?.Invoke(message);

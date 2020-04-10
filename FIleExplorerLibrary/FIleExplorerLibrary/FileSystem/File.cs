@@ -1,85 +1,118 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.IO;
+using System.Text;
 
 namespace FileSystem
 {
     public class File : BaseData
     {
-        public override void Copy(string oldPath, string newPath)
+        public StringBuilder Content { get; set; }
+
+
+
+        public File(string path)
         {
-            if (System.IO.File.Exists(oldPath) && !System.IO.File.Exists(newPath))
+            Path = path;
+            Content = new StringBuilder();
+        }
+
+
+
+        public override void Copy(string newPath)
+        {
+            try 
             {
-                System.IO.File.Copy(oldPath, newPath);
-                SetEvent("Copied", "Файл успешно скопирован");
+                System.IO.File.Copy(Path, newPath);
+                SetEvent("Copied", "File successfuly copied");
             }
-            else if (System.IO.File.Exists(newPath))
-                SetEvent("Copied", $"Файл с таким именем уже существует в {newPath}");
-            else if (!System.IO.File.Exists(oldPath))
-                SetEvent("Copied", $"Файл {getNameFromPath(oldPath)} не найден");
+            catch (Exception exception)
+            {
+                if (System.IO.File.Exists(newPath))
+                    SetEvent("Copied", $"File already exists in {newPath}");
+                else if (!System.IO.File.Exists(Path))
+                    SetEvent("Copied", $"File {GetNameFromPath(Path)} not found");
+                else
+                    SetEvent("Copied", exception.Message);
+            }    
         }
 
 
         public override void Create(string fileName)
         {
-            if (!System.IO.File.Exists(fileName))
+            try
             {
-                System.IO.File.Create(fileName);
-                SetEvent("Created", "Файл успешно создан");
-            }   
-            else
-                SetEvent("Created", "Такой файл уже существует");
+                if (!System.IO.File.Exists(fileName))
+                {
+                    System.IO.File.Create(fileName);
+                    SetEvent("Created", "File successfuly created");
+                }
+                else
+                    SetEvent("Created", "File already exists here");
+            }
+            catch (Exception exception)
+            {
+                SetEvent("Created", exception.Message);
+            }
         }
 
 
         public override void Delete(string path)
         {
-            if (System.IO.File.Exists(path))
+            try
             {
                 System.IO.File.Delete(path);
-                SetEvent("Deleted", $"Файл {path} успешно удален");
+                SetEvent("Deleted", $"File {GetNameFromPath(path)} successfuly deleted");
             }
-            else
-                SetEvent("Deleted", $"Файл {path} не найден");
+            catch (Exception exception)
+            {
+                SetEvent("Deleted", exception.Message);
+            }   
         }
 
 
-        public override void Move(string oldPath, string newPath)
+        public override void Move(string newPath)
         {
-            MoveTo("Moved", oldPath, newPath, $"Файл {getNameFromPath(oldPath)} успешно перемещен в {newPath}", $"Файл {getNameFromPath(oldPath)} не найден", $"Файл {getNameFromPath(oldPath)} уже существует в {newPath}");
+            MoveTo("Moved", Path, newPath, $"File {GetNameFromPath(Path)} successfuly moved in {newPath}", $"File {GetNameFromPath(Path)} not foudn", $"File {GetNameFromPath(Path)} already exists in {newPath}");
         }
 
 
         private void MoveTo(string fileManagerStateHandler, string oldPath, string newPath, string success, string notFound, string alreadyExists)
         {
-            if (System.IO.File.Exists(oldPath) && !System.IO.File.Exists(newPath))
+            try
             {
                 System.IO.File.Move(oldPath, newPath);
                 SetEvent("Moved", success);
             }
-            else if (!System.IO.File.Exists(oldPath))
-                SetEvent(fileManagerStateHandler, notFound);
-            else if (System.IO.File.Exists(newPath))
-                SetEvent(fileManagerStateHandler, alreadyExists);
-        }
-
-
-        public List<string> Open(string path)
-        {
-            using (StreamReader streamReader = new StreamReader(path, System.Text.Encoding.Default))
+            catch (Exception exception)
             {
-                string line;
-                List<string> text = new List<string>(); 
-                while ((line = streamReader.ReadLine()) != null)
-                    text.Add(line);
-
-                return text; 
+                if (!System.IO.File.Exists(oldPath))
+                    SetEvent(fileManagerStateHandler, notFound);
+                else if (System.IO.File.Exists(newPath))
+                    SetEvent(fileManagerStateHandler, alreadyExists);
+                else
+                    SetEvent(fileManagerStateHandler, exception.Message);
             }
         }
 
 
-        public override void Rename(string oldPath, string newPath)
+        public void Open(string path)
         {
-            MoveTo("Renamed", oldPath, newPath, "Файл успешно создан", $"Файл {getNameFromPath(oldPath)} не найден", $"Файл с таким именем уже существует в {newPath}");
+            try
+            {
+                StreamReader streamReader = new StreamReader(path);
+                while (!streamReader.EndOfStream)
+                    Content.AppendLine(streamReader.ReadLine());
+            }
+            catch
+            {
+                SetEvent("Opened", $"Couldn't open {path}");
+            }
+        }
+
+
+        public override void Rename(string newPath)
+        {
+            MoveTo("Renamed", Path, newPath, "File successfuly moved", $"File {GetNameFromPath(Path)} not found", $"File already exists in {newPath}");
         }
     }
 }
