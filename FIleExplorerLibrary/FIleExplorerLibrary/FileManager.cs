@@ -11,8 +11,6 @@ namespace FileExplorerLibrary
         private BaseData clipboard;
         private string currentPath;
 
-
-        public bool IsFileOpen { get; private set; }
         public bool IsCopy { get; set; }
 
 
@@ -24,7 +22,6 @@ namespace FileExplorerLibrary
             this.events = events;
 
             currentPath = @"C:\";
-            IsFileOpen = false;
             clipboard = new Directory(@"C:\");
             files = new List<BaseData>() { clipboard };
             files = (files[0] as Directory).Open(currentPath);
@@ -45,12 +42,6 @@ namespace FileExplorerLibrary
                 clipboard = new Directory(path);
                 clipboard.SetEventHandlers(events);
             } 
-        }
-
-
-        public void Close()
-        {
-            IsFileOpen = false;
         }
 
 
@@ -143,10 +134,7 @@ namespace FileExplorerLibrary
                         currentPath = currentPath + name + @"\";
                     }
                     else if (files[dataIndex] is File)
-                    {
-                        (files[dataIndex] as File).Open(currentPath + name);
-                        IsFileOpen = true;
-                    }               
+                        (files[dataIndex] as File).Open(currentPath + name);         
                 }
                 else
                     (files[0] as Directory).Open(currentPath + name);

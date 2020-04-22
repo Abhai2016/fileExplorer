@@ -23,85 +23,71 @@ namespace File_Explorer
             
             while (isAlive)
             {
-                if (!fileManager.IsFileOpen)
+                Console.WriteLine("Commands - Open/Cut/Copy/Create/Delete/Rename/Exit");
+                string action = Console.ReadLine();
+
+                switch (action)
                 {
-                    Console.WriteLine("Commands - Open/Cut/Copy/Create/Delete/Rename/Exit");
-                    string action = Console.ReadLine();
-
-                    switch (action)
-                    {
-                        case "Open":
-                            Console.WriteLine(fileOrDirectroryName + "open");
-                            fileManager.Open(Console.ReadLine());
-                            printData();
-                            break;
-
-                        case "Cut":
-                            Console.WriteLine(fileOrDirectroryName + "move");
-                            fileManager.Cut(Console.ReadLine());
-                            printData();
-                            break;
-
-                        case "Copy":
-                            Console.WriteLine(fileOrDirectroryName + "copy");
-                            fileManager.Copy(Console.ReadLine());
-                            printData();
-                            break;
-
-                        case "Paste":
-                            fileManager.Paste();
-                            printData();
-                            break;
-
-                        case "Create":
-                            Console.WriteLine("Folder or File?");
-                            string type = Console.ReadLine();
-
-                            if (type.Equals("Folder") || type.Equals("File"))
-                            {
-                                Console.WriteLine(fileOrDirectroryName + "create");
-                                fileManager.Create(type, Console.ReadLine());
-                            }
-                            else
-                                Console.WriteLine("Wrong type, please try again");
-
-                            printData();
-                            break;
-
-                        case "Delete":
-                            Console.WriteLine(fileOrDirectroryName + "delete");
-                            fileManager.Delete(Console.ReadLine());
-                            printData();
-                            break;
-
-                        case "Rename":
-                            Console.WriteLine(fileOrDirectroryName + "rename");
-                            string oldName = Console.ReadLine();
-                            Console.WriteLine("Write a new name");
-                            fileManager.Rename(oldName, Console.ReadLine());
-                            printData();
-                            break;
-
-                        case "Exit":
-                            isAlive = false;
-                            break;
-
-                        default:
-                            Console.WriteLine("Wrong command, please try again \n");
-                            break;
-                    }    
-                }
-                else
-                {
-                    Console.WriteLine("To close file write command \"Close\"");
-                    if (Console.ReadLine().Equals("Close"))
-                    {
-                        fileManager.Close();
+                    case "Open":
+                        Console.WriteLine(fileOrDirectroryName + "open");
+                        fileManager.Open(Console.ReadLine());
                         printData();
-                    }
-                    else
+                        break;
+
+                    case "Cut":
+                        Console.WriteLine(fileOrDirectroryName + "move");
+                        fileManager.Cut(Console.ReadLine());
+                        printData();
+                        break;
+
+                    case "Copy":
+                        Console.WriteLine(fileOrDirectroryName + "copy");
+                        fileManager.Copy(Console.ReadLine());
+                        printData();
+                        break;
+
+                    case "Paste":
+                        fileManager.Paste();
+                        printData();
+                        break;
+
+                    case "Create":
+                        Console.WriteLine("Folder or File?");
+                        string type = Console.ReadLine();
+
+                        if (type.Equals("Folder") || type.Equals("File"))
+                        {
+                            Console.WriteLine(fileOrDirectroryName + "create");
+                            fileManager.Create(type, Console.ReadLine());
+                        }
+                        else
+                            Console.WriteLine("Wrong type, please try again");
+
+                        printData();
+                        break;
+
+                    case "Delete":
+                        Console.WriteLine(fileOrDirectroryName + "delete");
+                        fileManager.Delete(Console.ReadLine());
+                        printData();
+                        break;
+
+                    case "Rename":
+                        Console.WriteLine(fileOrDirectroryName + "rename");
+                        string oldName = Console.ReadLine();
+                        Console.WriteLine("Write a new name");
+                        fileManager.Rename(oldName, Console.ReadLine());
+                        printData();
+                        break;
+
+                    case "Exit":
+                        isAlive = false;
+                        break;
+
+                    default:
                         Console.WriteLine("Wrong command, please try again \n");
-                }
+                        break;
+                }    
             }
         }
 
@@ -112,18 +98,7 @@ namespace File_Explorer
             Console.WriteLine();
 
             foreach (BaseData data in fileManager.GetData())
-            {
-                if (fileManager.IsFileOpen)
-                {
-                    if ((data is File) && (data as File).Content.Length > 0)
-                    {
-                        Console.Write((data as File).Content);
-                        break;
-                    }
-                }  
-                else
-                    Console.WriteLine(data.Path); 
-            }  
+             Console.WriteLine(data.Path); 
 
             Console.WriteLine();
         }

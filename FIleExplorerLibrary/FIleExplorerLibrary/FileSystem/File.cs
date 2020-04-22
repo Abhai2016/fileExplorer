@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -43,7 +44,7 @@ namespace FileSystem
             {
                 if (!System.IO.File.Exists(fileName))
                 {
-                    System.IO.File.Create(fileName);
+                    System.IO.File.Create(fileName).Close(); // method Create() creates and opens file so we can't get an access by another programm so we have to close it after creation
                     SetEvent(Created, "File successfuly created");
                 }
                 else
@@ -99,9 +100,7 @@ namespace FileSystem
         {
             try
             {
-                StreamReader streamReader = new StreamReader(path);
-                while (!streamReader.EndOfStream)
-                    Content.AppendLine(streamReader.ReadLine());
+                Process.Start("C://Windows//System32/notepad.exe", path);
             }
             catch
             {
