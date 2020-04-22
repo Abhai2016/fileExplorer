@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FileSystem
 {
     public abstract class BaseData
     {
-        protected internal event FileManagerStateHandler Copied;
-        protected internal event FileManagerStateHandler Created;
-        protected internal event FileManagerStateHandler Deleted;
-        protected internal event FileManagerStateHandler Moved;
-        protected internal event FileManagerStateHandler Opened;
-        protected internal event FileManagerStateHandler Renamed;
+        protected const int Copied = 0;
+        protected const int Created = 1;
+        protected const int Deleted = 2;
+        protected const int Moved = 3;
+        protected const int Opened = 4;
+        protected const int Renamed = 5;
 
+
+        
         public delegate void FileManagerStateHandler(string message);
+        List<FileManagerStateHandler> events;
         public string Path { get; protected set; }
 
 
@@ -45,43 +49,15 @@ namespace FileSystem
         }
 
 
-        public void SetEventHandlers(FileManagerStateHandler copied, FileManagerStateHandler created,
-            FileManagerStateHandler deleted, FileManagerStateHandler moved, FileManagerStateHandler opened, FileManagerStateHandler renamed)
+        public void SetEventHandlers(List<FileManagerStateHandler> events)
         {
-            Copied += copied;
-            Created += created;
-            Deleted += deleted;
-            Moved += moved;
-            Opened += opened;
-            Renamed += renamed;
+            this.events = events;
         }
 
 
-        protected void SetEvent(string eventType, string message)
+        protected void SetEvent(int idEvent, string message)
         {
-            switch (eventType)
-            {
-                case "Copied":
-                    Copied?.Invoke(message);
-                    break;
-                case "Created":
-                    Created?.Invoke(message);
-                    break;
-                case "Deleted":
-                    Deleted?.Invoke(message);
-                    break;
-                case "Moved":
-                    Moved?.Invoke(message);
-                    break;
-                case "Opened":
-                    Opened?.Invoke(message);
-                    break;
-                case "Renamed":
-                    Renamed?.Invoke(message);
-                    break;
-                default:
-                    throw new Exception("Didn't find this event");
-            }
+            events[idEvent]?.Invoke(message);
         }
     }
 }

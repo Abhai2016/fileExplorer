@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -23,16 +24,16 @@ namespace FileSystem
             try 
             {
                 System.IO.File.Copy(Path, newPath);
-                SetEvent("Copied", "File successfuly copied");
+                SetEvent(Copied, "File successfuly copied");
             }
             catch (Exception exception)
             {
                 if (System.IO.File.Exists(newPath))
-                    SetEvent("Copied", $"File already exists in {newPath}");
+                    SetEvent(Copied, $"File already exists in {newPath}");
                 else if (!System.IO.File.Exists(Path))
-                    SetEvent("Copied", $"File {GetNameFromPath(Path)} not found");
+                    SetEvent(Copied, $"File {GetNameFromPath(Path)} not found");
                 else
-                    SetEvent("Copied", exception.Message);
+                    SetEvent(Copied, exception.Message);
             }    
         }
 
@@ -43,15 +44,15 @@ namespace FileSystem
             {
                 if (!System.IO.File.Exists(fileName))
                 {
-                    System.IO.File.Create(fileName);
-                    SetEvent("Created", "File successfuly created");
+                    System.IO.File.Create(fileName).Close(); // method Create() creates and opens file so we can't get an access by another programm so we have to close it after creation
+                    SetEvent(Created, "File successfuly created");
                 }
                 else
-                    SetEvent("Created", "File already exists here");
+                    SetEvent(Created, "File already exists here");
             }
             catch (Exception exception)
             {
-                SetEvent("Created", exception.Message);
+                SetEvent(Created, exception.Message);
             }
         }
 
@@ -61,36 +62,36 @@ namespace FileSystem
             try
             {
                 System.IO.File.Delete(path);
-                SetEvent("Deleted", $"File {GetNameFromPath(path)} successfuly deleted");
+                SetEvent(Deleted, $"File {GetNameFromPath(path)} successfuly deleted");
             }
             catch (Exception exception)
             {
-                SetEvent("Deleted", exception.Message);
+                SetEvent(Deleted, exception.Message);
             }   
         }
 
 
         public override void Move(string newPath)
         {
-            MoveTo("Moved", Path, newPath, $"File {GetNameFromPath(Path)} successfuly moved in {newPath}", $"File {GetNameFromPath(Path)} not foudn", $"File {GetNameFromPath(Path)} already exists in {newPath}");
+            MoveTo(Moved, Path, newPath, $"File {GetNameFromPath(Path)} successfuly moved in {newPath}", $"File {GetNameFromPath(Path)} not foudn", $"File {GetNameFromPath(Path)} already exists in {newPath}");
         }
 
 
-        private void MoveTo(string fileManagerStateHandler, string oldPath, string newPath, string success, string notFound, string alreadyExists)
+        private void MoveTo(int idEvent, string oldPath, string newPath, string success, string notFound, string alreadyExists)
         {
             try
             {
                 System.IO.File.Move(oldPath, newPath);
-                SetEvent("Moved", success);
+                SetEvent(Moved, success);
             }
             catch (Exception exception)
             {
                 if (!System.IO.File.Exists(oldPath))
-                    SetEvent(fileManagerStateHandler, notFound);
+                    SetEvent(idEvent, notFound);
                 else if (System.IO.File.Exists(newPath))
-                    SetEvent(fileManagerStateHandler, alreadyExists);
+                    SetEvent(idEvent, alreadyExists);
                 else
-                    SetEvent(fileManagerStateHandler, exception.Message);
+                    SetEvent(idEvent, exception.Message);
             }
         }
 
@@ -99,20 +100,18 @@ namespace FileSystem
         {
             try
             {
-                StreamReader streamReader = new StreamReader(path);
-                while (!streamReader.EndOfStream)
-                    Content.AppendLine(streamReader.ReadLine());
+                Process.Start("C://Windows//System32/notepad.exe", path);
             }
             catch
             {
-                SetEvent("Opened", $"Couldn't open {path}");
+                SetEvent(Opened, $"Couldn't open {path}");
             }
         }
 
 
         public override void Rename(string newPath)
         {
-            MoveTo("Renamed", Path, newPath, "File successfuly moved", $"File {GetNameFromPath(Path)} not found", $"File already exists in {newPath}");
+            MoveTo(Renamed, Path, newPath, "File successfuly moved", $"File {GetNameFromPath(Path)} not found", $"File already exists in {newPath}");
         }
     }
 }
