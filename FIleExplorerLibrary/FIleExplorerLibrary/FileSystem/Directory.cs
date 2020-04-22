@@ -23,12 +23,12 @@ namespace FileSystem
             if (sourceDirectory.Exists && !targetDirectory.Exists)
             {
                 CopyAll(sourceDirectory, targetDirectory);
-                SetEvent("Copied", $"Folder {GetNameFromPath(Path)} successfully copied to {targetDirectory.FullName}");
+                SetEvent(Copied, $"Folder {GetNameFromPath(Path)} successfully copied to {targetDirectory.FullName}");
             }
             else if (!sourceDirectory.Exists)
-                SetEvent("Copied", $"Folder {GetNameFromPath(Path)} doesnt exist in {Path}");
+                SetEvent(Copied, $"Folder {GetNameFromPath(Path)} doesnt exist in {Path}");
             else
-                SetEvent("Copied", $"Folder {GetNameFromPath(Path)} already exists in {targetDirectory.FullName}");
+                SetEvent(Copied, $"Folder {GetNameFromPath(Path)} already exists in {targetDirectory.FullName}");
         }
 
 
@@ -55,14 +55,14 @@ namespace FileSystem
                 if (!directoryInfo.Exists)
                 {
                     System.IO.Directory.CreateDirectory(path);
-                    SetEvent("Created", $"Folder {GetNameFromPath(path)} successfully created");
+                    SetEvent(Created, $"Folder {GetNameFromPath(path)} successfully created");
                 }
                 else
-                    SetEvent("Created", "Folder with this name already exists");
+                    SetEvent(Created, "Folder with this name already exists");
             }
             catch (Exception exception)
             {
-                SetEvent("Created", exception.Message);
+                SetEvent(Created, exception.Message);
             }
         }
 
@@ -72,37 +72,37 @@ namespace FileSystem
             try
             {
                 System.IO.Directory.Delete(path, true);
-                SetEvent("Deleted", $"Folder {GetNameFromPath(path)} successfully deleted");
+                SetEvent(Deleted, $"Folder {GetNameFromPath(path)} successfully deleted");
             }
             catch (Exception exception)
             {
-                SetEvent("Deleted", exception.Message);
+                SetEvent(Deleted, exception.Message);
             }
         }
 
 
         public override void Move(string newPath)
         {
-            MoveTo("Moved", newPath, $"Folder {GetNameFromPath(Path)} successfully moved to {newPath}", $"Folder {GetNameFromPath(Path)} doesn't exist", $"Folder already exists in {newPath}");    
+            MoveTo(Moved, newPath, $"Folder {GetNameFromPath(Path)} successfully moved to {newPath}", $"Folder {GetNameFromPath(Path)} doesn't exist", $"Folder already exists in {newPath}");    
         }
 
 
-        private void MoveTo(string fileManagerStateHandler, string newPath, string success, string notFound, string alreadyExists)
+        private void MoveTo(int idEvent, string newPath, string success, string notFound, string alreadyExists)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(Path);
             try
             {
                 directoryInfo.MoveTo(newPath);
-                SetEvent(fileManagerStateHandler, success);
+                SetEvent(idEvent, success);
             }
             catch (Exception exception)
             {
                 if (System.IO.Directory.Exists(newPath))
-                    SetEvent(fileManagerStateHandler, alreadyExists);
+                    SetEvent(idEvent, alreadyExists);
                 else if (!directoryInfo.Exists)
-                    SetEvent(fileManagerStateHandler, notFound);
+                    SetEvent(idEvent, notFound);
                 else
-                    SetEvent(fileManagerStateHandler, exception.Message);
+                    SetEvent(idEvent, exception.Message);
             }
         }
 
@@ -123,7 +123,7 @@ namespace FileSystem
             }
             catch
             {
-                SetEvent("Opened", $"Couldn't open {path}");
+                SetEvent(Opened, $"Couldn't open {path}");
             }
 
             return listDirectoriesAndFiles;
@@ -132,7 +132,7 @@ namespace FileSystem
 
         public override void Rename(string newPath)
         {
-            MoveTo("Renamed", newPath, $"Folder successfully reanmed", $"Folder {GetNameFromPath(Path)} doesn't exist", $"Folder with this name already exists");
+            MoveTo(Renamed, newPath, $"Folder successfully reanmed", $"Folder {GetNameFromPath(Path)} doesn't exist", $"Folder with this name already exists");
         }
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QYA5sr4hlp79t0ZVAcpz3AzG5v6Ob6zWC115zwaPds59i2QQlsWGamAcQPrq39jN6TCgRpth5R/12dqFqnhDRw==",
+  "dgSpecHash": "/lOtVqBs55YB4o1Ftl9rbOXp3vO4c5bdgMquR/et4uFNtTGDQFo2hLM076L3rKTXy3gVrMHDaDp6RDb2jRhZ+Q==",
   "success": true,
-  "projectFilePath": "C:\\Work\\.NET\\Console Projects\\File Explorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj",
+  "projectFilePath": "C:\\Work\\.NET\\Console Projects\\FileExplorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Abhai\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Abhai\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"

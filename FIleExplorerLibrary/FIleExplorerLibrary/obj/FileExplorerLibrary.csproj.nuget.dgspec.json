@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Work\\.NET\\Console Projects\\File Explorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj": {}
+    "C:\\Work\\.NET\\Console Projects\\FileExplorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj": {}
   },
   "projects": {
-    "C:\\Work\\.NET\\Console Projects\\File Explorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj": {
+    "C:\\Work\\.NET\\Console Projects\\FileExplorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Work\\.NET\\Console Projects\\File Explorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj",
+        "projectUniqueName": "C:\\Work\\.NET\\Console Projects\\FileExplorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj",
         "projectName": "FIleExplorerLibrary",
-        "projectPath": "C:\\Work\\.NET\\Console Projects\\File Explorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj",
+        "projectPath": "C:\\Work\\.NET\\Console Projects\\FileExplorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj",
         "packagesPath": "C:\\Users\\Abhai\\.nuget\\packages\\",
-        "outputPath": "C:\\Work\\.NET\\Console Projects\\File Explorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\obj\\",
+        "outputPath": "C:\\Work\\.NET\\Console Projects\\FileExplorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Abhai\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -56,6 +56,11 @@
           "assetTargetFallback": true,
           "warn": true,
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
         }
       }
     }

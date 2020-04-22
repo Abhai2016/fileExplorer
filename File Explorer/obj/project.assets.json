@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Work\\.NET\\Console Projects\\File Explorer\\File Explorer\\File Explorer.csproj",
+      "projectUniqueName": "C:\\Work\\.NET\\Console Projects\\FileExplorer\\File Explorer\\File Explorer.csproj",
       "projectName": "File Explorer",
-      "projectPath": "C:\\Work\\.NET\\Console Projects\\File Explorer\\File Explorer\\File Explorer.csproj",
+      "projectPath": "C:\\Work\\.NET\\Console Projects\\FileExplorer\\File Explorer\\File Explorer.csproj",
       "packagesPath": "C:\\Users\\Abhai\\.nuget\\packages\\",
-      "outputPath": "C:\\Work\\.NET\\Console Projects\\File Explorer\\File Explorer\\obj\\",
+      "outputPath": "C:\\Work\\.NET\\Console Projects\\FileExplorer\\File Explorer\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Abhai\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -52,8 +52,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Work\\.NET\\Console Projects\\File Explorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj": {
-              "projectPath": "C:\\Work\\.NET\\Console Projects\\File Explorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj"
+            "C:\\Work\\.NET\\Console Projects\\FileExplorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj": {
+              "projectPath": "C:\\Work\\.NET\\Console Projects\\FileExplorer\\FIleExplorerLibrary\\FIleExplorerLibrary\\FIleExplorerLibrary.csproj"
             }
           }
         }

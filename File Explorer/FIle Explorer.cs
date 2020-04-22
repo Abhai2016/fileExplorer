@@ -1,7 +1,8 @@
 ﻿using FileExplorerLibrary;
 using FileSystem;
 using System;
-
+using System.Collections.Generic;
+using static FileSystem.BaseData;
 
 namespace File_Explorer
 {
@@ -11,7 +12,7 @@ namespace File_Explorer
         private const string fileOrDirectroryName = "Write the name of the folder(file) which you want to ";
         private static bool isAlive = true;
 
-        private static FileManager fileManager = new FileManager(Copied, Created, Deleted, Moved, Opened, Renamed);
+        private static FileManager fileManager = new FileManager(new List<FileManagerStateHandler>() { Copied, Created, Deleted, Moved, Opened, Renamed });
 
 
 
